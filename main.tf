@@ -102,9 +102,9 @@ resource "aws_iam_role_policy" "codebuild_policy" {
   policy = data.template_file.codepipeline_policy_template.rendered
 }
 
-# CodeBuild Section for the Package stage
+# CodeBuild Section for the Build stage
 resource "aws_codebuild_project" "build_project" {
-  name           = "${var.repo_name}-package"
+  name           = "${var.repo_name}-Build`"
   description    = "The CodeBuild project for ${var.repo_name}"
   service_role   = aws_iam_role.codebuild_assume_role.arn
   build_timeout  = var.build_timeout
@@ -127,9 +127,60 @@ resource "aws_codebuild_project" "build_project" {
   }
 }
 
-# CodeBuild Section for the Test stage
-resource "aws_codebuild_project" "test_project" {
-  name           = "${var.repo_name}-test"
+# CodeBuild Section for the Unit Test stage
+resource "aws_codebuild_project" "Unit_test" {
+  name           = "${var.repo_name}-Test"
+  description    = "The CodeBuild project for ${var.repo_name}"
+  service_role   = aws_iam_role.codebuild_assume_role.arn
+  build_timeout  = var.build_timeout
+  encryption_key = aws_kms_key.artifact_encryption_key.arn
+
+  artifacts {
+    type = "CODEPIPELINE"
+  }
+
+  environment {
+    compute_type    = var.build_compute_type
+    image           = var.build_image
+    type            = "LINUX_CONTAINER"
+    privileged_mode = var.build_privileged_override
+  }
+
+  source {
+    type      = "CODEPIPELINE"
+    buildspec = var.unittest_buildspec
+  }
+}
+
+
+# CodeBuild Section for the Sonar stage
+resource "aws_codebuild_project" "Sonar_Check" {
+  name           = "${var.repo_name}-Sonar"
+  description    = "The CodeBuild project for ${var.repo_name}"
+  service_role   = aws_iam_role.codebuild_assume_role.arn
+  build_timeout  = var.build_timeout
+  encryption_key = aws_kms_key.artifact_encryption_key.arn
+
+  artifacts {
+    type = "CODEPIPELINE"
+  }
+
+  environment {
+    compute_type    = var.build_compute_type
+    image           = var.build_image
+    type            = "LINUX_CONTAINER"
+    privileged_mode = var.build_privileged_override
+  }
+
+  source {
+    type      = "CODEPIPELINE"
+    buildspec = var.sonar_buildspec
+  }
+}
+
+# CodeBuild Section for the create JAR stage
+resource "aws_codebuild_project" "Artifact" {
+  name           = "${var.repo_name}-Package"
   description    = "The CodeBuild project for ${var.repo_name}"
   service_role   = aws_iam_role.codebuild_assume_role.arn
   build_timeout  = var.build_timeout
@@ -211,7 +262,7 @@ resource "aws_codepipeline" "codepipeline" {
   }
 
   stage {
-    name = "Test"
+    name = "Build"
 
     action {
       name             = "Test"
@@ -223,11 +274,47 @@ resource "aws_codepipeline" "codepipeline" {
       version          = "1"
 
       configuration = {
-        ProjectName = aws_codebuild_project.test_project.name
+        ProjectName = aws_codebuild_project.build_project.name
       }
     }
   }
 
+stage {
+    name = "Unit_Test"
+
+    action {
+      name             = "Test"
+      category         = "Test"
+      owner            = "AWS"
+      provider         = "CodeBuild"
+      input_artifacts  = ["source"]
+      output_artifacts = ["tested"]
+      version          = "1"
+
+      configuration = {
+        ProjectName = aws_codebuild_project.Unit_test.name
+      }
+    }
+  }
+  
+  stage {
+    name = "Sonar_Check"
+
+    action {
+      name             = "Test"
+      category         = "Test"
+      owner            = "AWS"
+      provider         = "CodeBuild"
+      input_artifacts  = ["source"]
+      output_artifacts = ["tested"]
+      version          = "1"
+
+      configuration = {
+        ProjectName = aws_codebuild_project.Sonar_Check.name
+      }
+    }
+  }
+  
   stage {
     name = "Package"
 
@@ -241,7 +328,7 @@ resource "aws_codepipeline" "codepipeline" {
       version          = "1"
 
       configuration = {
-        ProjectName = aws_codebuild_project.build_project.name
+        ProjectName = aws_codebuild_project.Artifact.name
       }
     }
   }
