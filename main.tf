@@ -90,8 +90,10 @@ data "template_file" "codebuild_policy_template" {
   vars = {
     artifact_bucket         = aws_s3_bucket.build_artifact_bucket.arn
     aws_kms_key             = aws_kms_key.artifact_encryption_key.arn
-    codebuild_project_test  = aws_codebuild_project.test_project.id
-    codebuild_project_build = aws_codebuild_project.build_project.id
+    codebuild_project_build  = aws_codebuild_project.build_project.id
+    codebuild_project_test = aws_codebuild_project.Unit_test.id
+    codebuild_project_sonar  = aws_codebuild_project.Sonar_Check.id
+    codebuild_project_artifact = aws_codebuild_project.Artifact.id
   }
 }
 
