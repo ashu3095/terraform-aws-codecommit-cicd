@@ -267,8 +267,8 @@ resource "aws_codepipeline" "codepipeline" {
     name = "Build"
 
     action {
-      name             = "Test"
-      category         = "Test"
+      name             = "Build"
+      category         = "Build"
       owner            = "AWS"
       provider         = "CodeBuild"
       input_artifacts  = ["source"]
@@ -303,8 +303,8 @@ stage {
     name = "Sonar_Check"
 
     action {
-      name             = "Test"
-      category         = "Test"
+      name             = "Sonar"
+      category         = "sonar"
       owner            = "AWS"
       provider         = "CodeBuild"
       input_artifacts  = ["source"]
@@ -322,7 +322,7 @@ stage {
 
     action {
       name             = "Package"
-      category         = "Build"
+      category         = "Package"
       owner            = "AWS"
       provider         = "CodeBuild"
       input_artifacts  = ["tested"]
