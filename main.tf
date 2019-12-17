@@ -290,7 +290,7 @@ stage {
       owner            = "AWS"
       provider         = "CodeBuild"
       input_artifacts  = ["source"]
-      output_artifacts = ["tested"]
+      output_artifacts = ["unittested"]
       version          = "1"
 
       configuration = {
@@ -308,7 +308,7 @@ stage {
       owner            = "AWS"
       provider         = "CodeBuild"
       input_artifacts  = ["source"]
-      output_artifacts = ["tested"]
+      output_artifacts = ["sonartested"]
       version          = "1"
 
       configuration = {
@@ -325,8 +325,8 @@ stage {
       category         = "Package"
       owner            = "AWS"
       provider         = "CodeBuild"
-      input_artifacts  = ["tested"]
-      output_artifacts = ["packaged"]
+      input_artifacts  = ["source"]
+      output_artifacts = ["packagetested"]
       version          = "1"
 
       configuration = {
