@@ -165,11 +165,6 @@ resource "aws_codedeploy_deployment_group" "main" {
 
   deployment_config_name = "CodeDeployDefault.OneAtATime" # AWS defined deployment config
 
-  ec2_tag_filter = {
-    key   = "Name"
-    type  = "KEY_AND_VALUE"
-    value = "devlopment"
-  }
 
   # trigger a rollback on deployment failure event
   auto_rollback_configuration {
