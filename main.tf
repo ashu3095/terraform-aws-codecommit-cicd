@@ -123,7 +123,7 @@ resource "aws_codebuild_project" "build_project" {
 
   source {
     type      = "CODEPIPELINE"
-    buildspec = var.package_buildspec
+    buildspec = var.build_buildspec
   }
 }
 
@@ -199,7 +199,7 @@ resource "aws_codebuild_project" "Artifact" {
 
   source {
     type      = "CODEPIPELINE"
-    buildspec = var.test_buildspec
+    buildspec = var.artifact_buildspec
   }
 }
 
