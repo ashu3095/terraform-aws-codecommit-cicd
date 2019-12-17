@@ -64,12 +64,21 @@ variable "build_privileged_override" {
   default     = "false"
 }
 
-variable "test_buildspec" {
+variable "build_buildspec" {
   description = "The buildspec to be used for the Test stage (default: buildspec_test.yml)"
-  default     = "buildspec_test.yml"
+  default     = "buildspec_build.yml"
 }
 
-variable "package_buildspec" {
+variable "unittest_buildspec" {
   description = "The buildspec to be used for the Package stage (default: buildspec.yml)"
-  default     = "buildspec.yml"
+  default     = "buildspec_test.yml"
+}
+variable "sonar_buildspec" {
+  description = "The buildspec to be used for the Test stage (default: buildspec_test.yml)"
+  default     = "buildspec_sonar.yml"
+}
+
+variable "artifact_buildspec" {
+  description = "The buildspec to be used for the Package stage (default: buildspec.yml)"
+  default     = "buildspec_artifact.yml"
 }
