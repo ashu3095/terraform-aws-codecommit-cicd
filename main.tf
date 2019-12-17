@@ -304,7 +304,7 @@ stage {
 
     action {
       name             = "Sonar"
-      category         = "sonar"
+      category         = "Test"
       owner            = "AWS"
       provider         = "CodeBuild"
       input_artifacts  = ["source"]
@@ -322,7 +322,7 @@ stage {
 
     action {
       name             = "Package"
-      category         = "Package"
+      category         = "Build"
       owner            = "AWS"
       provider         = "CodeBuild"
       input_artifacts  = ["source"]
