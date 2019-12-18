@@ -384,20 +384,20 @@ stage {
   }
   
  stage {
-    name = "Deploy"
+     name = "Deploy"
 
     action {
-      name             = "deploy"
+      name             = "Deploy"
       category         = "Deploy"
       owner            = "AWS"
-      provider         = "Codedeploy"
+      provider         = "CodeDeployToECS"
       input_artifacts  = ["source"]
       output_artifacts = ["deploytested"]
       version          = "1"
-
-      configuration = {
-        ProjectName = aws_codedeploy_app.main.name
+configuration  = {
+      ApplicationName   = aws_codedeploy_app.main.name
       }
+
     }
   } 
 }
