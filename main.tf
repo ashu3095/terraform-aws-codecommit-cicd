@@ -214,15 +214,15 @@ resource "aws_codedeploy_app" "main" {
 resource "aws_codedeploy_deployment_group" "main" {
   app_name              = "${aws_codedeploy_app.main.name}"
   deployment_group_name = "Sample_DepGroup"
+  deployment_config_name = "CodeDeployDefault.OneAtATime"
   service_role_arn      = "${aws_iam_role.codedeploy_service.arn}"
 
-  
   ec2_tag_set {
-  ec2_tag_filter = {
-    key   = "Name"
-    type  = "KEY_AND_VALUE"
-    value = "Development"
-  }
+        ec2_tag_filter {
+            key   = "CodePipelineDemo"
+            type  = "KEY_AND_VALUE"
+            value = "CodePipelineDemo"
+        }
     }
 
   # trigger a rollback on deployment failure event
