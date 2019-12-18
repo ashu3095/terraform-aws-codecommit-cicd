@@ -204,6 +204,31 @@ resource "aws_codebuild_project" "Artifact" {
     buildspec = var.artifact_buildspec
   }
 }
+  
+# CodeBuild Section for the target Infra EC2
+resource "aws_codebuild_project" "Target" {
+  name           = "${var.repo_name}-target"
+  description    = "The CodeBuild project for ${var.repo_name}"
+  service_role   = aws_iam_role.codebuild_assume_role.arn
+  build_timeout  = var.build_timeout
+  encryption_key = aws_kms_key.artifact_encryption_key.arn
+
+  artifacts {
+    type = "CODEPIPELINE"
+  }
+
+  environment {
+    compute_type    = var.build_compute_type
+    image           = var.build_image
+    type            = "LINUX_CONTAINER"
+    privileged_mode = var.build_privileged_override
+  }
+
+  source {
+    type      = "CODEPIPELINE"
+    buildspec = var.target_buildspec
+  }
+}  
 
 # create a CodeDeploy application
 resource "aws_codedeploy_app" "main" {
@@ -333,6 +358,23 @@ stage {
       provider         = "CodeBuild"
       input_artifacts  = ["source"]
       output_artifacts = ["packagetested"]
+      version          = "1"
+
+      configuration = {
+        ProjectName = aws_codebuild_project.Artifact.name
+      }
+    }
+  }
+  stage {
+    name = "target_EC2_Provison"
+
+    action {
+      name             = "target_ec2"
+      category         = "Build"
+      owner            = "AWS"
+      provider         = "CodeBuild"
+      input_artifacts  = ["source"]
+      output_artifacts = ["targettested"]
       version          = "1"
 
       configuration = {
