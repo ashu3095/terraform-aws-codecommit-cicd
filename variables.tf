@@ -82,3 +82,8 @@ variable "artifact_buildspec" {
   description = "The buildspec to be used for the Package stage (default: buildspec.yml)"
   default     = "buildspec_artifact.yml"
 }
+
+variable "target_buildspec" {
+  description = "The buildspec to be used to provision target EC2 (default: buildspec.yml)"
+  default     = "buildspec_tf.yml"
+}
