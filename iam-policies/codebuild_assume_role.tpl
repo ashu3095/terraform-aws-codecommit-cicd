@@ -6,7 +6,12 @@
       "Principal": {
         "Service": "codebuild.amazonaws.com"
       },
-      "Action": "sts:AssumeRole"
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents",
+        sts:AssumeRole
+      ]
     }
   ]
 }
