@@ -30,9 +30,7 @@
         "*"
       ],
       "Action": [
-        "logs:CreateLogGroup",
-        "logs:CreateLogStream",
-        "logs:PutLogEvents"
+        "logs:*"
       ]
     },
     {
