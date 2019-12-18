@@ -219,9 +219,9 @@ resource "aws_codedeploy_deployment_group" "main" {
 
   ec2_tag_set {
         ec2_tag_filter {
-            key   = "CodePipelineDemo"
+            key   = "Name"
             type  = "KEY_AND_VALUE"
-            value = "CodePipelineDemo"
+            value = "Development"
         }
     }
 
