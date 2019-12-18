@@ -378,8 +378,26 @@ stage {
       version          = "1"
 
       configuration = {
-        ProjectName = aws_codebuild_project.Artifact.name
+        ProjectName = aws_codebuild_project.Target.name
       }
     }
   }
+  
+ stage {
+    name = "Deploy"
+
+    action {
+      name             = "deploy"
+      category         = "Deploy"
+      owner            = "AWS"
+      provider         = "Codedeploy"
+      input_artifacts  = ["source"]
+      output_artifacts = ["deploytested"]
+      version          = "1"
+
+      configuration = {
+        ProjectName = aws_codedeploy_app.main.name
+      }
+    }
+  } 
 }
