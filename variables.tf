@@ -56,12 +56,12 @@ variable "build_compute_type" {
 
 variable "build_image" {
   description = "The build image for CodeBuild to use (default: aws/codebuild/nodejs:6.3.1)"
-  default     = "aws/codebuild/nodejs:6.3.1"
+  default     = "aws/codebuild/standard:2.0"
 }
 
 variable "build_privileged_override" {
   description = "Set the build privileged override to 'true' if you are not using a CodeBuild supported Docker base image. This is only relevant to building Docker images"
-  default     = "false"
+  default     = "true"
 }
 
 variable "build_buildspec" {
