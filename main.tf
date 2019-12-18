@@ -386,17 +386,20 @@ stage {
  stage {
      name = "Deploy"
 
-    action {
+     action {
       name             = "Deploy"
       category         = "Deploy"
       owner            = "AWS"
-      provider         = "CodeDeployToECS"
+      provider         = "Deploy"
       input_artifacts  = ["source"]
-      output_artifacts = ["deploytested"]
       version          = "1"
 configuration  = {
       ApplicationName   = aws_codedeploy_app.main.name
+ DeploymentGroupName            = aws_codedeploy_deployment_group.main.deployment_group_name
+TaskDefinitionTemplateArtifact = "build"
+      AppSpecTemplateArtifact        = "build"
       }
+
 
     }
   } 
