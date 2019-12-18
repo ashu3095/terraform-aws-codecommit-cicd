@@ -396,8 +396,6 @@ stage {
 configuration  = {
       ApplicationName   = aws_codedeploy_app.main.name
  DeploymentGroupName            = aws_codedeploy_deployment_group.main.deployment_group_name
-TaskDefinitionTemplateArtifact = "build"
-      AppSpecTemplateArtifact        = "build"
       }
 
 
