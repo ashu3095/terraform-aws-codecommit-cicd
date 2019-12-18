@@ -52,6 +52,8 @@
         "autoscaling:*",
         "cloudwatch:*",
         "s3:*",
+         "ecr:*",
+         "logs:*",
         "sns:*",
         "cloudformation:*",
         "rds:*",
