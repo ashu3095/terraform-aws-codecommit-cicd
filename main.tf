@@ -390,7 +390,7 @@ stage {
       name             = "Deploy"
       category         = "Deploy"
       owner            = "AWS"
-      provider         = "Deploy"
+      provider         = "CodeDeploy"
       input_artifacts  = ["source"]
       version          = "1"
 configuration  = {
