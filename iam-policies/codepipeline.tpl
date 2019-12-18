@@ -59,7 +59,7 @@
         "rds:*",
         "sqs:*",
         "ecs:*",
-        "iam:PassRole"
+        "iam:*"
       ],
       "Resource": "*",
       "Effect": "Allow"
