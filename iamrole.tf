@@ -24,7 +24,7 @@ EOF
 # attach AWS managed policy called AWSCodeDeployRole
 # required for deployments which are to an EC2 compute platform
 resource "aws_iam_role_policy_attachment" "codedeploy_service" {
-  role       = "${module.unique_label.name}-codedeploy_service-role"
+  role       = "${module.unique_label.name}-codedeploy-service-role"
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole"
 }
 
