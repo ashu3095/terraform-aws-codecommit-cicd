@@ -285,7 +285,7 @@ resource "aws_codepipeline" "codepipeline" {
       owner            = "AWS"
       provider         = "CodeCommit"
       version          = "1"
-      output_artifacts = ["source"]
+      output_artifacts = ["sourceArtifacts"]
 
       configuration = {
         RepositoryName = var.repo_name
@@ -302,8 +302,7 @@ resource "aws_codepipeline" "codepipeline" {
       category         = "Build"
       owner            = "AWS"
       provider         = "CodeBuild"
-      input_artifacts  = ["source"]
-      output_artifacts = ["tested"]
+      input_artifacts  = ["sourceArtifacts"]
       version          = "1"
 
       configuration = {
@@ -320,8 +319,7 @@ stage {
       category         = "Test"
       owner            = "AWS"
       provider         = "CodeBuild"
-      input_artifacts  = ["source"]
-      output_artifacts = ["unittested"]
+      input_artifacts  = ["sourceArtifacts"]
       version          = "1"
 
       configuration = {
@@ -338,8 +336,7 @@ stage {
       category         = "Test"
       owner            = "AWS"
       provider         = "CodeBuild"
-      input_artifacts  = ["source"]
-      output_artifacts = ["sonartested"]
+      input_artifacts  = ["sourceArtifacts"]
       version          = "1"
 
       configuration = {
@@ -356,8 +353,7 @@ stage {
       category         = "Build"
       owner            = "AWS"
       provider         = "CodeBuild"
-      input_artifacts  = ["source"]
-      output_artifacts = ["packagetested"]
+      input_artifacts  = ["sourceArtifacts"]
       version          = "1"
 
       configuration = {
@@ -373,8 +369,7 @@ stage {
       category         = "Build"
       owner            = "AWS"
       provider         = "CodeBuild"
-      input_artifacts  = ["source"]
-      output_artifacts = ["targettested"]
+      input_artifacts  = ["sourceArtifacts"]
       version          = "1"
 
       configuration = {
@@ -391,7 +386,7 @@ stage {
       category         = "Deploy"
       owner            = "AWS"
       provider         = "CodeDeploy"
-      input_artifacts  = ["source"]
+      input_artifacts  = ["sourceArtifacts"]
       version          = "1"
 configuration  = {
       ApplicationName   = aws_codedeploy_app.main.name
