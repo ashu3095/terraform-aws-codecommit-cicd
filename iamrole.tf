@@ -1,6 +1,6 @@
 # create a service role for codedeploy
 resource "aws_iam_role" "codedeploy_service" {
-  name = "codedeploy-service-role"
+  name = "${module.unique_label.name}-codedeploy-service-role"
 
   assume_role_policy = <<EOF
 {
@@ -24,13 +24,13 @@ EOF
 # attach AWS managed policy called AWSCodeDeployRole
 # required for deployments which are to an EC2 compute platform
 resource "aws_iam_role_policy_attachment" "codedeploy_service" {
-  role       = "${aws_iam_role.codedeploy_service.name}"
+  role       = "${module.unique_label.name}-codedeploy_service"
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole"
 }
 
 # create a service role for ec2 
 resource "aws_iam_role" "instance_profile" {
-  name = "codedeploy-instance-profile"
+  name = "${module.unique_label.name}-codedeploy-instance-profile"
 
   assume_role_policy = <<EOF
 {
@@ -58,6 +58,6 @@ resource "aws_iam_role_policy_attachment" "instance_profile_codedeploy" {
 }
 
 resource "aws_iam_instance_profile" "main" {
-  name = "codedeploy-instance-profile"
+  name = "${module.unique_label.name}-codedeploy-instance-profile"
   role = "${aws_iam_role.instance_profile.name}"
 }
