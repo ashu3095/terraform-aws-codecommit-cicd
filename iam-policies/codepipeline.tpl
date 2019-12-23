@@ -55,6 +55,7 @@
          "ecr:*",
          "logs:*",
         "sns:*",
+        "codedeploy:*",
         "cloudformation:*",
         "rds:*",
         "sqs:*",
