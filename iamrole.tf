@@ -21,11 +21,17 @@ resource "aws_iam_role" "codedeploy_service" {
 EOF
 }
 
+data "aws_iam_policy" "ReadOnlyAccess" {
+  arn = "arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole"
+}
+
+
+
 # attach AWS managed policy called AWSCodeDeployRole
 # required for deployments which are to an EC2 compute platform
 resource "aws_iam_role_policy_attachment" "codedeploy_service" {
   role       = "${module.unique_label.name}-codedeploy-service-role"
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole"
+  policy_arn = "${data.aws_iam_policy.ReadOnlyAccess.arn}"  
 }
 
 # create a service role for ec2 
