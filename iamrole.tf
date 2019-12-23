@@ -1,38 +1,3 @@
-# create a service role for codedeploy
-resource "aws_iam_role" "codedeploy_service" {
-  name = "${module.unique_label.name}-codedeploy-service-role"
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "",
-      "Effect": "Allow",
-      "Principal": {
-        "Service": [
-          "codedeploy.amazonaws.com"
-        ]
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
-}
-EOF
-}
-
-data "aws_iam_policy" "ReadOnlyAccess" {
-  arn = "arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole"
-}
-
-
-
-# attach AWS managed policy called AWSCodeDeployRole
-# required for deployments which are to an EC2 compute platform
-resource "aws_iam_role_policy_attachment" "codedeploy_service" {
-  role       = "${module.unique_label.name}-codedeploy-service-role"
-  policy_arn = "${data.aws_iam_policy.ReadOnlyAccess.arn}"  
-}
 
 # create a service role for ec2 
 resource "aws_iam_role" "instance_profile" {
