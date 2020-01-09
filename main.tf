@@ -102,20 +102,47 @@ data "aws_iam_policy" "ReadOnlyAccess" {
   arn = "arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole"
 }
 
+# create a service role for ec2
+resource "aws_iam_role" "instance_profile" {
+  name = "${module.unique_label.name}-codedeploy-instance-profile"
 
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": [
+          "ec2.amazonaws.com"
+        ]
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+}
 
 # attach AWS managed policy called AWSCodeDeployRole
 # required for deployments which are to an EC2 compute platform
 resource "aws_iam_role_policy_attachment" "codedeploy_service" {
-  role       = "${module.unique_label.name}-codedeploy-service-role"
-  policy_arn = "${data.aws_iam_policy.ReadOnlyAccess.arn}"  
+   role       = "${module.unique_label.name}-codedeploy-service-role"
+   policy_arn = "${data.aws_iam_policy.ReadOnlyAccess.arn}"
 }
 
 
+# provide ec2 access to s3 bucket to download revision. This role is needed by the CodeDeploy agent on EC2 instances.
+resource "aws_iam_role_policy_attachment" "instance_profile_codedeploy" {
+  role       = "${aws_iam_role.instance_profile.name}"
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforAWSCodeDeploy"
+}
 
-
-
-
+resource "aws_iam_instance_profile" "main" {
+  name = "${module.unique_label.name}-codedeploy-instance-profile"
+  role = "${aws_iam_role.instance_profile.name}"
+}
 
 
 
@@ -257,7 +284,7 @@ resource "aws_codebuild_project" "Artifact" {
     buildspec = var.artifact_buildspec
   }
 }
-  
+
 # CodeBuild Section for the target Infra EC2
 resource "aws_codebuild_project" "Target" {
   name           = "${var.repo_name}-target"
@@ -281,7 +308,7 @@ resource "aws_codebuild_project" "Target" {
     type      = "CODEPIPELINE"
     buildspec = var.target_buildspec
   }
-}  
+}
 
 # create a CodeDeploy application
 resource "aws_codedeploy_app" "main" {
@@ -380,7 +407,7 @@ stage {
       }
     }
   }
-  
+
   stage {
     name = "Sonar_Check"
 
@@ -397,7 +424,7 @@ stage {
       }
     }
   }
-  
+
   stage {
     name = "Package"
 
@@ -430,7 +457,7 @@ stage {
       }
     }
   }
-  
+
  stage {
      name = "Deploy"
 
@@ -448,5 +475,6 @@ configuration  = {
 
 
     }
-  } 
+  }
 }
+
