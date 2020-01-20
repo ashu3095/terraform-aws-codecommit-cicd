@@ -20,6 +20,16 @@ module "unique_label" {
   tags       = {}
 }
 
+# Create ECR repo
+resource "aws_ecr_repository" "foo" {
+  name                 = var.repo_name  
+  image_tag_mutability = "IMMUTABLE"
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+}
+
+
 # CodeCommit resources
 resource "aws_codecommit_repository" "repo" {
   repository_name = var.repo_name
