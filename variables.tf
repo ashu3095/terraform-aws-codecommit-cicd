@@ -36,7 +36,7 @@ variable "repo_default_branch" {
 
 variable "force_artifact_destroy" {
   description = "Force the removal of the artifact S3 bucket on destroy (default: false)."
-  default     = "false"
+  default     = "true"
 }
 
 variable "environment" {
